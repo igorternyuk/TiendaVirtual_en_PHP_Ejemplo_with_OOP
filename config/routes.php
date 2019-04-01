@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'news' => '/news/index',
-    'products' => '/products/list'
+    'product/([0-9]+)' => 'product/view/$1',
+    '' => 'site/index'
 ];

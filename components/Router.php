@@ -24,21 +24,22 @@ class Router {
     public function run(){
         //debug($this->routes);
         $uri = $this->getURI();
-        echo "URI = ".$uri."<br />";
+        
         foreach ($this->routes as $urlPattern => $path) {
             if(preg_match("~$urlPattern~", $uri)){
-                $segments = explode("/", $uri);
+                $internalRoute = preg_replace("~$urlPattern~", $path, $uri);
+                //Utils::debug($path);
+                $segments = explode("/", $internalRoute);
+                //Utils::debug($segments);
                 $controllerName = ucfirst(array_shift($segments))."Controller";
                 $actionName = "action".ucfirst(array_shift($segments));  
                 $params = $segments;
-                echo "Класс контроллера: ".$controllerName."<br />";
-                echo "Имя метода: ".$actionName."<br />";
                 $controllerFile = ROOT . "/controllers/" . $controllerName . ".php";
-                echo "Файл контроллера: " . $controllerFile;
+                
                 if(file_exists($controllerFile)){
                     include_once($controllerFile);
                     $controllerInstance = new $controllerName;
-                    $res = call_user_func($controllerInstance->$actionName, $params);
+                    $res = call_user_func(array($controllerInstance, $actionName), $params);
                     if($res){
                         return;
                     }
