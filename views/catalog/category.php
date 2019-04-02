@@ -47,14 +47,14 @@
                                         </div>
                                         <?php if($product['is_new']) { ?>
                                             <img src="/template/images/home/new.png" class="new" alt="" />
-                                        <?php } ?>
+                                        <?php } ?>                                       
                                     </div>
                                 </div>
                             </div>
                             <?php } ?>
-
+                            
                         </div><!--features_items-->                       
-
+                        <center><?php echo $pagination; ?></center>
                     </div>
                 </div>
             </div>
