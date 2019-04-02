@@ -1,8 +1,8 @@
 <?php
 
 return [
-   'host' => 'zshop.local',
+   'host' => '127.0.0.15',
    'db_name' => 'zshop',
-   'user' => 'zenko',
+   'username' => 'zenko',
    'password' => '1319'    
 ];

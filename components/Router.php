@@ -32,14 +32,16 @@ class Router {
                 $segments = explode("/", $internalRoute);
                 //Utils::debug($segments);
                 $controllerName = ucfirst(array_shift($segments))."Controller";
+                
                 $actionName = "action".ucfirst(array_shift($segments));  
+                //Utils::debug(['Controller' => $controllerName, 'Action' => $actionName]);
                 $params = $segments;
                 $controllerFile = ROOT . "/controllers/" . $controllerName . ".php";
                 
                 if(file_exists($controllerFile)){
                     include_once($controllerFile);
                     $controllerInstance = new $controllerName;
-                    $res = call_user_func(array($controllerInstance, $actionName), $params);
+                    $res = call_user_func_array(array($controllerInstance, $actionName), $params);
                     if($res){
                         return;
                     }
