@@ -39,10 +39,11 @@ class Router {
                 $controllerFile = ROOT . "/controllers/" . $controllerName . ".php";
                 
                 if(file_exists($controllerFile)){
+                    //Utils::debug($controllerFile);
                     include_once($controllerFile);
                     $controllerInstance = new $controllerName;
-                    $res = call_user_func_array(array($controllerInstance, $actionName), $params);
-                    if($res){
+                   // $res = ;
+                    if(call_user_func_array(array($controllerInstance, $actionName), $params)){
                         return;
                     }
                 }

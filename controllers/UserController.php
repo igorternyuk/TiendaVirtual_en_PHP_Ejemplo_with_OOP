@@ -6,7 +6,42 @@
  * @author Igor Ternyuk <xmonad100 at gmail.com>
  */
 class UserController {
-    //put your code here
+    
+    public function actionLogin(){
+        $email = '';
+        $password = '';
+        $btnLogin = filter_input(INPUT_POST, 'btnLogin');
+        if(isset($btnLogin)){
+            $errors = [];
+            $email = filter_input(INPUT_POST, 'email');
+            if(!User::checkEmail($email)){
+                array_push($errors, "Некорректный формат E-mail");
+            }
+            
+            $password = filter_input(INPUT_POST, 'password');
+            if(!User::checkPassword($password)){
+                array_push($errors, "Пароль дожен быть не короче 6-ти символов");
+            }
+            
+            $userId = User::checkUserCredentials($email, $password);
+            if($userId == false){
+                array_push($errors, "Неправильный логин или пароль");
+            } else {
+                User::login($userId);
+                Utils::redirect("/cabinet");
+            }
+        }
+        require_once ROOT . '/views/user/login.php';
+        return true;
+
+    }
+    
+    public function actionLogout(){
+        unset($_SESSION['user']);
+        Utils::redirect();
+        return true;
+    }
+    
     public function actionRegister(){
         $username = '';
         $email = '';

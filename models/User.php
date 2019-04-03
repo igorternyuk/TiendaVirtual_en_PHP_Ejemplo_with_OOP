@@ -37,6 +37,23 @@ class User {
         return $statement->fetchColumn() ? true : false;
     }
     
+    public static function checkUserCredentials($email, $password){
+        $db = Db::getConnection();
+        
+        $query = "SELECT `id` FROM `user` WHERE `email` = :email"
+                . " AND `password` = :password;";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':email', $email, PDO::PARAM_STR);
+        $encryptedPassword = md5($password);
+        $statement->bindParam(':password', $encryptedPassword, PDO::PARAM_STR);
+        if($statement->execute()){
+            $res = $statement->fetch();
+            return $res['id'];
+        }
+        return false;
+        
+    }
+    
     public static function register($username, $email, $password){
         $encryptedPassword = md5($password);
         $db = Db::getConnection();
@@ -55,6 +72,34 @@ class User {
         $statement->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $roleAdded = $statement->execute();
         return $userAdded && $roleAdded;
+    }
+    
+    public static function getById($userId){
+        $db = Db::getConnection();
+        $query = "SELECT * FROM `user` WHERE `id` = :id LIMIT 1;";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':id', $userId);
+        if($statement->execute()){
+            $user = $statement->fetch(PDO::FETCH_ASSOC);
+            return $user;
+        }
+        return false;
+    }
+    
+    public static function login($userId){
+        $_SESSION['user'] = $userId;
+    }
+    
+    public static function checkIfLogged(){
+        if(isset($_SESSION['user'])){
+            return $_SESSION['user'];
+        }
+        
+        Utils::redirect("/user/login");
+    }
+    
+    public static function isGuest(){
+        return isset($_SESSION['user']);
     }
 }
 
