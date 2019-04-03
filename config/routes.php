@@ -5,5 +5,7 @@ return [
     'catalog/([0-9])+/page-([0-9]+)' => 'catalog/category/$1/$2',
     'catalog/([0-9])+' => 'catalog/category/$1',
     'catalog' => 'catalog/index',
+    'user/register' => 'user/register',
+    'cabinet' => 'cabinet/index',
     '' => 'site/index'
 ];

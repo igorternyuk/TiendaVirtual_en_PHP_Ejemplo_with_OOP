@@ -6,21 +6,21 @@
                         <div class="left-sidebar">
                             <h2>Каталог</h2>
                             <div class="panel-group category-products">
-                                <?php foreach ($categories as $category) { ?>
+                                <?php foreach ($categories as $cat) { ?>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a href="/catalog/<?php echo $category['id']; ?>"
-                                               <?php if($category['id'] == $categoryId){
+                                            <a href="/catalog/<?php echo $cat['id']; ?>"
+                                               <?php if($cat['id'] == $categoryId){
                                                    echo "class= 'active'";
                                                 } ?>
                                                >
-                                                <?php echo $category['name']; ?>
+                                                <?php echo $cat['name'] . "(" . $cat['total'] . ")"; ?>
                                             </a>
                                         </h4>
                                     </div>
                                 </div>
-                                <?php } ?>                                
+                                <?php } unset($cat); ?>                                
                             </div>
 
                         </div>

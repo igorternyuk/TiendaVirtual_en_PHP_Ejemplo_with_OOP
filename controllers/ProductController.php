@@ -6,9 +6,6 @@
  * @author Igor Ternyuk <xmonad100 at gmail.com>
  */
 
-include_once ROOT.'/models/Category.php';
-include_once ROOT.'/models/Product.php';
-
 class ProductController {
     public function actionView($productId){
         $categories = Category::getAll();
