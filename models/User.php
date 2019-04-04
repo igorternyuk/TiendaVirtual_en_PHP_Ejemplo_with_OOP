@@ -39,17 +39,19 @@ class User {
     
     public static function checkUserCredentials($email, $password){
         $db = Db::getConnection();
-        
+        //Utils::debug(md5('555555'));
         $query = "SELECT `id` FROM `user` WHERE `email` = :email"
                 . " AND `password` = :password;";
         $statement = $db->prepare($query);
         $statement->bindParam(':email', $email, PDO::PARAM_STR);
         $encryptedPassword = md5($password);
+        //Utils::debug($encryptedPassword);
         $statement->bindParam(':password', $encryptedPassword, PDO::PARAM_STR);
         if($statement->execute()){
             $res = $statement->fetch();
             return $res['id'];
         }
+
         return false;
         
     }
@@ -86,6 +88,38 @@ class User {
         return false;
     }
     
+    public static function update($userId, $name, $password = null){
+        $db = Db::getConnection();
+        $query = "UPDATE `user` SET `name` = :name ";
+        
+        if($password != null){
+            $query .= " , `password` = :password ";
+        }
+        
+        $query .= " WHERE `id` = :id LIMIT 1;";
+        
+        //Utils::debug($query);                
+        
+        $statement = $db->prepare($query);
+        $statement->bindParam(':name', $name, PDO::PARAM_STR);
+        
+        if($password != null){
+            $encryptedPassword = md5($password);
+            $statement->bindParam(':password', $encryptedPassword, PDO::PARAM_STR);
+        }
+        
+        $statement->bindParam(':id', $userId, PDO::PARAM_INT);
+        return $statement->execute();
+    }
+    
+    public static function removeById($userId){
+        $db = Db::getConnection();
+        $query = "DELETE * FROM `user` WHERE id = :id LIMIT 1;";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':id', $userId);
+        return $statement->execute();
+    }
+
     public static function login($userId){
         $_SESSION['user'] = $userId;
     }

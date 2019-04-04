@@ -8,6 +8,7 @@ return [
     'user/login' => 'user/login',
     'user/logout' => 'user/logout',
     'user/register' => 'user/register',    
+    'cabinet/edit' => 'cabinet/edit',    
     'cabinet' => 'cabinet/index',
     '' => 'site/index'
 ];
