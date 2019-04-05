@@ -24,8 +24,12 @@ class Cart {
     
     public static function removeProduct($productId){
         if(isset($_SESSION['cart'])){
-            unset($_SESSION[productId]);
+            unset($_SESSION['cart'][$productId]);
         }
+    }
+    
+    public static function clear(){
+        unset($_SESSION['cart']);
     }
     
     public static function calculateTotalItems(){

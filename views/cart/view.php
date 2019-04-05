@@ -36,7 +36,14 @@
                             <?php foreach($products as $product) { ?>
                             <tr>
                                 <td><?php echo $product['code']; ?></td>
-                                <td><?php echo $product['name']; ?></td>
+                                <td>
+                                    <p>
+                                        <a href="/product/<?php echo $product['id']; ?>">
+                                        <?php echo $product['name']; ?>
+                                        </a>
+                                    </p>
+                                    
+                                </td>
                                 <td><?php echo "$".$product['price']; ?></td>
                                 <td><input type="number" id="productCount_<?php echo $product['id']; ?>" min="1" max="<?php echo $product['available']; ?>" value="<?php echo $productsInCart[$product['id']]; ?>" onchange="changeProductCount(<?php echo $product['id']; ?>);"></td>
                                 <td><span id="subtotal_<?php echo $product['id']; ?>"><?php echo "$".($product['price'] * $productsInCart[$product['id']]); ?></span></td>
@@ -47,6 +54,7 @@
                                 <td ><strong><span id="cartTotalSum"><?php echo "$".(Cart::calculateTotalSum()); ?></span></strong></td>
                             </tr>
                         </table>
+                    <a href="/cart/checkout" id="btnCheckOut" class="btn btn-default" ><i class="fa fa-shopping-cart"></i>Оформить заказ</a>
                     <?php } else { ?>
                         <p>Корзина пуста</p>
                     <?php } ?>

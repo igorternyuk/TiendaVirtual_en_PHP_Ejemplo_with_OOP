@@ -35,7 +35,7 @@
                              
                             <div class="contactinfo">
                                 <ul class="nav nav-pills">
-                                    <li><a href="#"><i class="fa fa-phone"></i> +380956692817</a></li>
+                                    <li><a href="#"><i class="fa fa-phone"></i> +380959962817</a></li>
                                     <li><a href="#"><i class="fa fa-envelope"></i> xmonad100@gmail.com</a></li>
                                 </ul>
                             </div>
@@ -69,7 +69,7 @@
                                             <span id="cartTotal" name="cartTotal"><?php echo "$".Cart::calculateTotalSum(); ?></span>
                                     </a></li>
                                     
-                                    <?php if(!User::isGuest()) { ?>
+                                    <?php if(User::isGuest()) { ?>
                                         <li><a href="/user/login"><i class="fa fa-lock"></i> Вход</a></li>
                                     <?php } else { ?>
                                         <li><a href="/cabinet"><i class="fa fa-user"></i> Аккаунт</a></li>

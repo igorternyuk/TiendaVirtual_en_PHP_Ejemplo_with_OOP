@@ -13,6 +13,7 @@ return [
     'cart/changecount/([0-9]+)/([0-9]+)' => 'cart/changecount/$1/$2',
     'cart/add/([0-9]+)' => 'cart/add/$1',
     'cart/remove/([0-9]+)' => 'cart/remove/$1',
+    'cart/checkout' => 'cart/checkout',
     'cart' => 'cart/view',
     '' => 'site/index'
 ];

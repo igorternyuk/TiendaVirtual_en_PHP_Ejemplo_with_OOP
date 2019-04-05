@@ -90,6 +90,7 @@ class Product {
     }
     
     public static function getProductsByIds($ids){
+        //Utils::debug($ids);
         $db = Db::getConnection();
         //Utils::debug($ids);
         $placeholders = str_repeat('?,', count($ids) - 1) . '?';

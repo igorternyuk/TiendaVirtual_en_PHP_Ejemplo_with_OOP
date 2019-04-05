@@ -53,7 +53,11 @@ class User {
         }
 
         return false;
-        
+    }
+    
+    public static function checkPhone($phone){
+        $pattern = "~([+38]?)0((50)|(63)|(66)|(67)|(68)|(93)|(95)|(96)|(97)|(99)|(99))([0-9]{6})~";
+        return preg_match($pattern, $phone);
     }
     
     public static function register($username, $email, $password){
@@ -132,8 +136,12 @@ class User {
         Utils::redirect("/user/login");
     }
     
+    public static function getLoggedUserId(){
+        return (isset($_SESSION['user'])) ? $_SESSION['user'] : false;
+    }
+    
     public static function isGuest(){
-        return isset($_SESSION['user']);
+        return !isset($_SESSION['user']);
     }
 }
 
