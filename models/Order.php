@@ -44,10 +44,23 @@ class Order {
     }
     
     public static function getAll(){
-        
+       $db = Db::getConnection();
+       $query = "SELECT * FROM `order`"; 
+       $statement = $db->prepare($query);
+       if($statement->execute()){
+           return $statement->fetch(PDO::FETCH_ASSOC);
+       }
+       return false;
     }
     
     public static function getUserOrders($userId){
-        
+       $db = Db::getConnection();
+       $query = "SELECT o.* FROM `order` AS o WHERE o.user_id = :user_id"; 
+       $statement = $db->prepare($query);
+       $statement->bindParam(':user_id', $userId);
+       if($statement->execute()){
+           return $statement->fetchAll(PDO::FETCH_ASSOC);
+       }
+       return false;
     }
 }

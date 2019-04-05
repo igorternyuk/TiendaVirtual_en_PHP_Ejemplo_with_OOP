@@ -23,7 +23,7 @@ class CatalogController {
        //Utils::debug(['categoryId' => $categoryId, 'page' => $page]);
        $categories = Category::getAll();
        foreach($categories as &$category){
-            $category['total'] = Product::countProductsOfCategory($category['id']);;
+            $category['total'] = Product::countProductsOfCategory($category['id']);
         }
        $products = Product::getProductsByCategoryId($categoryId, $page);
        $productTotal = Product::countProductsOfCategory($categoryId);

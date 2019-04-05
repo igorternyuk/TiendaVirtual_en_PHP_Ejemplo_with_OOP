@@ -39,7 +39,6 @@ class User {
     
     public static function checkUserCredentials($email, $password){
         $db = Db::getConnection();
-        //Utils::debug(md5('555555'));
         $query = "SELECT `id` FROM `user` WHERE `email` = :email"
                 . " AND `password` = :password;";
         $statement = $db->prepare($query);

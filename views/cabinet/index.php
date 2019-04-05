@@ -6,8 +6,8 @@
         <h4><?php echo "Мы приветствуем Вас на нашем сайте уважаемый, "
                     . $user['name']."!<br />"; ?></h4>
         <ul>
-            <li><a href="/user/edit">Редактировать данные</a></li>
-            <li><a href="/user/history">Список покупок</a></li>
+            <li><a href="/cabinet/edit">Редактировать данные</a></li>
+            <li><a href="/cabinet/history">Список покупок</a></li>
         </ul>
     </div>
 </div>

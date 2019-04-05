@@ -32,9 +32,10 @@
                                 <th>Цена за единицу</th>
                                 <th>Количество</th>
                                 <th>Стоимость</th>
+                                <th>Действие</th>
                             </tr>
                             <?php foreach($products as $product) { ?>
-                            <tr>
+                            <tr id="product_<?php echo $product['id']; ?>">
                                 <td><?php echo $product['code']; ?></td>
                                 <td>
                                     <p>
@@ -47,6 +48,7 @@
                                 <td><?php echo "$".$product['price']; ?></td>
                                 <td><input type="number" id="productCount_<?php echo $product['id']; ?>" min="1" max="<?php echo $product['available']; ?>" value="<?php echo $productsInCart[$product['id']]; ?>" onchange="changeProductCount(<?php echo $product['id']; ?>);"></td>
                                 <td><span id="subtotal_<?php echo $product['id']; ?>"><?php echo "$".($product['price'] * $productsInCart[$product['id']]); ?></span></td>
+                                <td><a href="#" onclick="removeProduct(<?php echo $product['id']; ?>); return false;">Убрать из корзины</a></td>
                             </tr>
                             <?php } ?>
                             <tr>

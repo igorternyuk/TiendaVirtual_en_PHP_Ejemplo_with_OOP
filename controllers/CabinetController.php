@@ -18,6 +18,24 @@ class CabinetController {
         return true;
     }
     
+    public function actionHistory(){
+        $categories = Category::getAll();
+        foreach($categories as &$category){
+            $category['total'] = Product::countProductsOfCategory($category['id']);
+        }
+        $userId = User::getLoggedUserId();
+        $userOrders = Order::getUserOrders($userId);
+        //Utils::debug($userOrders);
+        foreach($userOrders as &$order){
+            $orderId = $order['id'];
+            $orderItems = OrderItem::getAllItemsByOrderId($orderId);
+            $order['items'] = $orderItems;
+        }
+        //Utils::debug($userOrders);
+        require_once ROOT . '/views/cabinet/history.php';
+        return true;
+    }
+    
     public function actionEdit(){
         
         $userId = User::checkIfLogged();

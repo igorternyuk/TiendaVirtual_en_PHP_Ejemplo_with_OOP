@@ -41,7 +41,13 @@ class CartController {
     }
     
     public function actionRemove($productId){
-        
+        Cart::removeProduct($productId);
+        $res = [];
+        $res['success'] = true;
+        $res['cartTotalItems'] = Cart::calculateTotalItems();
+        $res['cartTotalSum'] = Cart::calculateTotalSum();
+        echo json_encode($res);
+        return true;
     }
     
     public function actionChangecount($productId, $newCount){
