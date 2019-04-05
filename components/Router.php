@@ -37,18 +37,19 @@ class Router {
                 //Utils::debug(['Controller' => $controllerName, 'Action' => $actionName]);
                 $params = $segments;
                 $controllerFile = ROOT . "/controllers/" . $controllerName . ".php";
-                
+               // Utils::debug($params);
                 if(file_exists($controllerFile)){
                     //Utils::debug($controllerFile);
                     include_once($controllerFile);
                     $controllerInstance = new $controllerName;
-                   // $res = ;
-                    if(call_user_func_array(array($controllerInstance, $actionName), $params)){
+                    if (call_user_func_array(array($controllerInstance, $actionName), $params)) {
                         return;
                     }
                 }
                 
             }
+            /*$controllerInstance = new SiteController;
+            call_user_func_array(array($controllerInstance, 'actionIndex'), []);*/
         }
         
     }

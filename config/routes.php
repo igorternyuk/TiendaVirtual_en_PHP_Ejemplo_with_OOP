@@ -10,5 +10,9 @@ return [
     'user/register' => 'user/register',    
     'cabinet/edit' => 'cabinet/edit',    
     'cabinet' => 'cabinet/index',
+    'cart/changecount/([0-9]+)/([0-9]+)' => 'cart/changecount/$1/$2',
+    'cart/add/([0-9]+)' => 'cart/add/$1',
+    'cart/remove/([0-9]+)' => 'cart/remove/$1',
+    'cart' => 'cart/view',
     '' => 'site/index'
 ];

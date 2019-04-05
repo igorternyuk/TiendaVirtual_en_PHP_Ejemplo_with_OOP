@@ -15,7 +15,9 @@ class SiteController {
         }
         //Utils::debug($categories);
         $products = Product::getLatest();
-        //Utils::debug($products);
+        $recommendedProducts = Product::getRecommended();
+        
+        //Utils::debug($recommendedProducts);
         require_once(ROOT . "/views/site/index.php");
         return true;
     }

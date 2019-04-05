@@ -2,7 +2,7 @@
             <div class="footer-bottom">
                 <div class="container">
                     <div class="row">
-                        <p class="pull-left">Copyright © 2015</p>
+                        <p class="pull-left">Copyright © 2019</p>
                         <p class="pull-right">Курс PHP Start</p>
                     </div>
                 </div>
@@ -17,5 +17,17 @@
         <script src="/template/js/price-range.js"></script>
         <script src="/template/js/jquery.prettyPhoto.js"></script>
         <script src="/template/js/main.js"></script>
+        <script src="/template/js/custom.js"></script>
+        <script>
+            $(document).ready(function(){
+                //$(element).attr("value");
+                $(".add-to-cart").click(function() {
+                    let id = $(this).attr('productId');
+                    addProduct(id);
+                    console.log("В корзину");
+                    return false;
+                });                
+            });        
+        </script>
     </body>
 </html>

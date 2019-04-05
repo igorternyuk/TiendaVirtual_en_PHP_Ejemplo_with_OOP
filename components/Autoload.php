@@ -5,7 +5,8 @@ spl_autoload_register('autoloader');
 function autoloader($class_name){
     $paths = [
         "/models/",
-        "/components/"
+        "/components/",
+        "/controllers/"
     ];
     
     foreach($paths as $pathToClass){

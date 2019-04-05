@@ -9,7 +9,7 @@ class CabinetController {
     
     public function actionIndex(){
         $userId = User::checkIfLogged();
-        $user = User::getById($userId);
+        //$user = User::getById($userId);
         if($userId){
             
             require_once ROOT . '/views/cabinet/index.php';

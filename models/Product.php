@@ -7,6 +7,7 @@
  */
 class Product {
     const SHOW_BY_DEFAULT = 3;
+    const SHOW_RECOMMENDED = 6;
     
     public static function getLatest($limit = self::SHOW_BY_DEFAULT){
        $limit = intval($limit);
@@ -22,6 +23,20 @@ class Product {
             array_push($products, $row);
         }
         return $products;
+    }
+    
+    public static function getRecommended($numToShow = self::SHOW_RECOMMENDED){
+        $db = Db::getConnection();
+        $numToShow = intval($numToShow);
+        $query = "SELECT * FROM `product` WHERE `status` = 1 AND"
+                . " `is_recommended` = 1 ORDER BY `id` DESC LIMIT {$numToShow}";
+        $statement = $db->prepare($query);
+        //$statement->bindParam(':to_show', $numToShow);
+        $res = $statement->execute();
+        if($res){
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return false;
     }
     
     public static function getProductsByCategoryId($categoryId, $page){
@@ -72,5 +87,46 @@ class Product {
         }
         //Utils::debug($product);
         return $product;
+    }
+    
+    public static function getProductsByIds($ids){
+        $db = Db::getConnection();
+        //Utils::debug($ids);
+        $placeholders = str_repeat('?,', count($ids) - 1) . '?';
+        $query = "SELECT * FROM `product` WHERE `id` IN ({$placeholders}) AND `status` = 1";
+        $statement = $db->prepare($query);
+        //$statement->bindParam(':ids', $ids, PDO::PARAM_STR);
+        if($statement->execute($ids)){
+            $res = $statement->fetchAll(PDO::FETCH_ASSOC);
+            //Utils::debug($res);
+            return $res;
+        }
+        return false;
+    }
+    
+    public static function getProductStock($productId){
+        $db = Db::getConnection();
+        $query = "SELECT `available` AS stock FROM `product` WHERE `status` = 1 "
+                . "AND `id` = :id LIMIT 1;";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':id', $productId, PDO::PARAM_INT);
+        if($statement->execute()){
+            $res = $statement->fetch(PDO::FETCH_ASSOC);
+            return $res['stock'];
+        }
+        return 0;
+    }
+    
+    public static function updateProductStock($productId, $newStock){
+        $db = Db::getConnection();
+        $query = "UPDATE `product` SET `available` = :stock WHERE `id` = :id LIMIT 1;";
+        $statement = $db->prepare($query);
+        $newStock = intval($newStock);
+        if($newStock < 0){
+            $newStock = 0;
+        }
+        $statement->bindParam(':stock', $newStock, PDO::PARAM_INT);
+        $statement->bindParam(':id', $productId);
+        return $statement->execute();
     }
 }
