@@ -103,7 +103,6 @@
                                             <li><a href="/cart/">Корзина</a></li> 
                                         </ul>
                                     </li> 
-                                    <li><a href="/blog/">Блог</a></li> 
                                     <li><a href="/about/">О магазине</a></li>
                                     <li><a href="/contacts/">Контакты</a></li>
                                 </ul>

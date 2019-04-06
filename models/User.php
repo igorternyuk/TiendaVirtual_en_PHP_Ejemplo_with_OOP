@@ -142,26 +142,48 @@ class User {
     public static function isGuest(){
         return !isset($_SESSION['user']);
     }
+    
+    public static function getUserRoles($userId){
+        $db = Db::getConnection();
+        $query = "SELECT u.id, u.name, ur.role_id, r.name FROM `user_role` AS ur"
+                . " LEFT JOIN `role` AS r ON ur.role_id = r.id"
+                . " LEFT JOIN `user` AS u ON ur.user_id = u.id"
+                . " WHERE u.id = :user_id";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        if($statement->execute()){
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return false;
+    }
+    
+    public static function checkIfAdmin($userId){
+        $db = Db::getConnection();
+        $query = "SELECT ur.role_id, r.name FROM `user_role` AS ur"
+                . " LEFT JOIN `role` AS r ON ur.role_id = r.id"
+                . " LEFT JOIN `user` AS u ON ur.user_id = u.id"
+                . " WHERE r.id = 2 AND r.name = 'admin' AND u.id = :user_id";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        if($statement->execute()){
+            $userRole = $statement->fetch(PDO::FETCH_ASSOC);
+            return $userRole['role_id'] == 2 && $userRole['name'] == 'admin';
+        }
+        return false;
+    }
+    
+    public static function getAllAdmins(){
+        $db = Db::getConnection();
+        $query = "SELECT u.* FROM `user_role` AS ur"
+                . " LEFT JOIN `role` AS r ON ur.role_id = r.id"
+                . " LEFT JOIN `user` AS u ON ur.user_id = u.id"
+                . " WHERE r.id = 2 AND r.name = 'admin'";
+        $statement = $db->prepare($query);
+        if($statement->execute()){
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return false;
+    }
 }
 
-/*
-CREATE TABLE `user`(
-	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `password` VARCHAR(255) NOT NULL
-);
 
-CREATE TABLE `role`(
-	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE `user_role`(
-	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `user_id` INT NOT NULL,
-    `role_id` INT NOT NULL,
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`),
-    FOREIGN KEY (`role_id`) REFERENCES `role`(`id`)
-);
- *  */

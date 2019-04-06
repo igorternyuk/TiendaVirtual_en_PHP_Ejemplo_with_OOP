@@ -1,6 +1,19 @@
 <?php
 
 return [
+    'admin/product/create' => 'adminProduct/create',
+    'admin/product/update/([0-9]+)' => 'adminProduct/update/$1',
+    'admin/product/remove/([0-9]+)' => 'adminProduct/remove/$1',
+    'admin/product' => 'adminProduct/index',
+    'admin/category/create' => 'adminCategory/create',
+    'admin/category/update/([0-9]+)' => 'adminCategory/update/$1',
+    'admin/category/remove/([0-9]+)' => 'adminCategory/remove/$1',
+    'admin/category' => 'adminCategory/index',
+    'admin/order/update/([0-9]+)' => 'adminOrder/update/$1',
+    'admin/order/remove/([0-9]+)' => 'adminOrder/remove/$1',
+    'admin/order/view/([0-9]+)' => 'adminOrder/view/$1',
+    'admin/order' => 'adminOrder/index',
+    'admin' => 'admin/index',
     'product/([0-9]+)' => 'product/view/$1',
     'catalog/([0-9]+)/cart/add/([0-9]+)' => 'cart/add/$2',
     'catalog/cart/add/([0-9]+)' => 'cart/add/$1',

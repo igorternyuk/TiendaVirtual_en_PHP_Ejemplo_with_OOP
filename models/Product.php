@@ -9,6 +9,18 @@ class Product {
     const SHOW_BY_DEFAULT = 3;
     const SHOW_RECOMMENDED = 6;
     
+    public static function getAll(){
+        $db = Db::getConnection();
+        $query = "SELECT `id`, `code`, `name`, `price` FROM `product` ORDER BY"
+                . " `id` ASC";
+        $statement = $db->prepare($query);
+        $res = $statement->execute();
+        if($res){
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return false;
+    }
+    
     public static function getLatest($limit = self::SHOW_BY_DEFAULT){
        $limit = intval($limit);
         
@@ -130,4 +142,78 @@ class Product {
         $statement->bindParam(':id', $productId);
         return $statement->execute();
     }
+    
+    public static function addNew($options){
+        $db = Db::getConnection();
+        $query = "INSERT INTO `product` (`name`, `code`, `category_id`, `price`,"
+                . "`available`, `brand`, `description`, `is_recommended`,"
+                . "`status`, `is_new`) VALUES(:name, :code, :category_id, :price,"
+                . ":available, :brand, :description, :is_recommended, :status,"
+                . ":is_new);";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':name', $options['productName']);
+        $statement->bindParam(':code', $options['productCode']);
+        $statement->bindParam(':category_id', $options['productCategoryId']);
+        $statement->bindParam(':price', $options['productPrice']);
+        $statement->bindParam(':available', $options['productStock']);
+        $statement->bindParam(':brand', $options['productBrand']);
+        $statement->bindParam(':description', $options['productDescription']);
+        $statement->bindParam(':is_recommended', $options['isProductRecommended']);
+        $statement->bindParam(':status', $options['productStatus']);
+        $statement->bindParam(':is_new', $options['isProductNew']);
+        if($statement->execute()){
+            return $db->lastInsertId();
+        } 
+        Utils::debug($statement->errorInfo());
+        return false;
+    }
+    
+    public static function update($options){
+        $db = Db::getConnection();
+        $query = "UPDATE `product` SET `name` = :name, `code` = :code,"
+                . " `category_id` = :category_id, `price` = :price,"
+                . "`available` = :available, `brand` = :brand,"
+                . " `description` = :description,"
+                . " `is_recommended` = :is_recommended,"
+                . "`status` = :status, `is_new` = :is_new WHERE `id` = :id"
+                . " LIMIT 1;";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':name', $options['productName']);
+        $statement->bindParam(':code', $options['productCode']);
+        $statement->bindParam(':category_id', $options['productCategoryId']);
+        $statement->bindParam(':price', $options['productPrice']);
+        $statement->bindParam(':available', $options['productStock']);
+        $statement->bindParam(':brand', $options['productBrand']);
+        $statement->bindParam(':description', $options['productDescription']);
+        $statement->bindParam(':is_recommended', $options['isProductRecommended']);
+        $statement->bindParam(':status', $options['productStatus']);
+        $statement->bindParam(':is_new', $options['isProductNew']);
+        $statement->bindParam(':is_id', $options['id']);
+        if($statement->execute()){
+            return true;
+        } 
+        Utils::debug($statement->errorInfo());
+        return false;
+    }
+    
+    public static function updateImage($productId, $image){
+        $db = Db::getConnection();
+        $query = "UPDATE `product` SET `image` = :image"
+                . " WHERE `id` = :id LIMIT 1";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':image', $image);
+        $statement->bindParam(':id', $productId);
+        return $statement->execute();
+    }
+    
+    public static function removeById($productId){
+        $db = Db::getConnection();
+        $query = "DELETE FROM `product` WHERE `id` = :id LIMIT 1";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':id', $productId, PDO::PARAM_INT);
+        $res = $statement->execute();
+        //Utils::debug($statement->errorInfo());
+        return $res;
+    }
+    
 }

@@ -15,31 +15,4 @@ class Db {
         $db->exec("set names utf8");
         return $db;
     }
-    
-    public static function executeSelection($query){
-        
-    }
-    
-    public static function executeUpdate($query){
-    }
-    
-    /*
-function executeSelection($query){
-    $db = Database::getInstance();
-    $connection = $db->getConnection();
-    $rs = $connection->query($query);
-    $smartyRs = fetchSmartyArray($rs);
-    $db->closeConnection();
-    return $smartyRs;
-}
-
-function executeUpdate($sql){
-    $db = Database::getInstance();
-    $connection = $db->getConnection();
-    $connection->query($sql);
-    $errorOccured = mysqli_error($connection);
-    $db->closeConnection();
-    return $errorOccured ? false : true;
-}
-*/
 }

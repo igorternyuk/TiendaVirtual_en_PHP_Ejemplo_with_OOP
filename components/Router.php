@@ -45,12 +45,8 @@ class Router {
                     if (call_user_func_array(array($controllerInstance, $actionName), $params)) {
                         return;
                     }
-                }
-                
+                }                
             }
-            /*$controllerInstance = new SiteController;
-            call_user_func_array(array($controllerInstance, 'actionIndex'), []);*/
-        }
-        
+        }        
     }
 }
