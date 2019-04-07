@@ -11,14 +11,17 @@ class Product {
     
     public static function getAll(){
         $db = Db::getConnection();
-        $query = "SELECT `id`, `code`, `name`, `price` FROM `product` ORDER BY"
-                . " `id` ASC";
+        $query = "SELECT COUNT(`id`) AS total FROM `product`";
         $statement = $db->prepare($query);
-        $res = $statement->execute();
-        if($res){
-            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        if($statement->execute()){
+            $res = $statement->fetch(PDO::FETCH_ASSOC);
+            return $res['total'];
         }
-        return false;
+        return 0;
+    }
+    
+    public static function countAll(){
+        $db = Db::getConnection();
     }
     
     public static function getLatest($limit = self::SHOW_BY_DEFAULT){
@@ -188,7 +191,7 @@ class Product {
         $statement->bindParam(':is_recommended', $options['isProductRecommended']);
         $statement->bindParam(':status', $options['productStatus']);
         $statement->bindParam(':is_new', $options['isProductNew']);
-        $statement->bindParam(':is_id', $options['id']);
+        $statement->bindParam(':id', $options['id']);
         if($statement->execute()){
             return true;
         } 

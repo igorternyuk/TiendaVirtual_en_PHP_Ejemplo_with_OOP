@@ -34,7 +34,7 @@
             
             <div class="col-lg-4">
                 <div class="login-form">
-                    <form action="/admin/product/update" method="post" enctype="multipart/form-data">
+                    <form action="/admin/product/update/<?php echo $product['id']; ?>" method="post" enctype="multipart/form-data">
                         <p>ID товара</p>
                         <input type="text" name="productId" value="<?php echo $product['id']; ?>" readonly />
                         <br />
@@ -75,8 +75,8 @@
                         
                         <br /><br />
                         <label>Новинка<input type="checkbox" id="isProductNew" name="isProductNew" <?php if($product['is_new']) { echo ' checked="checked" '; }?> /></label>
-                        <label>Рекомендуемый<input type="checkbox" id="isProductRecommended" name="isProductRecommended" <?php if($product['is_recommened']) { echo ' checked="checked" '; }?> /></label>
-                        <label>Отображать товар<input type="checkbox" id="productStatus" name="productStatus"  <?php if($product['is_recommened']) { echo ' checked="checked" '; }?>/></label>
+                        <label>Рекомендуемый<input type="checkbox" id="isProductRecommended" name="isProductRecommended" <?php if($product['is_recommended']) { echo ' checked="checked" '; }?> /></label>
+                        <label>Отображать товар<input type="checkbox" id="productStatus" name="productStatus"  <?php if($product['status']) { echo ' checked="checked" '; }?>/></label>
                         <br /><br />
                         <p>Загрузить изображение</p>
                         <input type="file" name="filename" value='<?php echo $product['image']; ?>'/>

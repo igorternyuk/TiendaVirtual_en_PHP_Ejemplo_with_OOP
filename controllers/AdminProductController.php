@@ -63,8 +63,7 @@ class AdminProductController extends AdminBase {
         } 
         
         $categories = Category::getAll();
-        require_once ROOT . '/views/admin/product/create.php';
-        
+        require_once ROOT . '/views/admin/product/create.php';        
         return true;
     }
     
@@ -97,7 +96,7 @@ class AdminProductController extends AdminBase {
             
             if(count($errors) == 0){
                 $productUpdated = Product::update($options);
-                
+                //Utils::debug($productUpdated);
                 if($productUpdated){
                     if (is_uploaded_file($_FILES["filename"]["tmp_name"])) {
                         $localPath = ImageUploadLocalPath;
@@ -125,8 +124,7 @@ class AdminProductController extends AdminBase {
     }
     
     public function actionRemove($productId){
-        self::checkIfAdmin();
-        
+        self::checkIfAdmin();        
         $removeConformed = filter_input(INPUT_POST, 'btnRemove');
         if($removeConformed){
             $ok = Product::removeById($productId);

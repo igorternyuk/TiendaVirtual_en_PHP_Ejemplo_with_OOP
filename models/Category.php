@@ -18,34 +18,60 @@ class Category {
         return $categories;
     }
     
-    public static function addNew($name, $rating = 1, $status = 1){
+    public static function getById($categoryId){
+        $db = Db::getConnection();
+        $query = "SELECT * FROM `category` WHERE `id` = :id LIMIT 1";
+        $statement = $db->prepare($query);
+        $statement->bindParam(':id', $categoryId);
+        if($statement->execute()){
+            return $statement->fetch(PDO::FETCH_ASSOC);
+        }
+        return false;
+    }
+    
+    public static function addNew($options){
         $db = Db::getConnection();
         $query = "INSERT INTO `category`  (`name`, `rating`, `status`)"
                 . " VALUES(:name, :rating, :status);";
         $statement = $db->prepare($query);
-        $statement->bindParam(':name', $name, PDO::PARAM_STR);
-        $statement->bindParam(':rating', $rating, PDO::PARAM_INT);
-        $statement->bindParam(':status', $status, PDO::PARAM_INT);
+        $statement->bindParam(':name', $options['name'], PDO::PARAM_STR);
+        $statement->bindParam(':rating', $options['rating'], PDO::PARAM_INT);
+        $statement->bindParam(':status', $options['status'], PDO::PARAM_INT);
         return $statement->execute();
     }
     
-    public static function update($id, $name, $rating = 1, $status = 1){
+    public static function update($options){
         $db = Db::getConnection();
         $query = "UPDATE `category` SET `name` = :name, `rating` = :rating,"
                 . "`status` = :status WHERE `id` = :id LIMIT 1";
         $statement = $db->prepare($query);
-        $statement->bindParam(':name', $name, PDO::PARAM_STR);
-        $statement->bindParam(':rating', $rating, PDO::PARAM_INT);
-        $statement->bindParam(':status', $status, PDO::PARAM_INT);
-        $statement->bindParam(':id', $id, PDO::PARAM_INT);
-        return $statement->execute();
+        $statement->bindParam(':name', $options['name'], PDO::PARAM_STR);
+        $statement->bindParam(':rating', $options['rating'], PDO::PARAM_INT);
+        $statement->bindParam(':status', $options['status'], PDO::PARAM_INT);
+        $statement->bindParam(':id', $options['id'], PDO::PARAM_INT);
+        if($statement->execute()){
+            return true;
+        } else {
+            return $statement->errorInfo();
+        }
     }
 
     public static function removeById($categoryId){
         $db = Db::getConnection();
-        $query = "DELETE * FROM `category` WHERE `id` = :id LIMIT 1";
+        $query = "DELETE FROM `category` WHERE `id` = :id LIMIT 1";
         $statement = $db->prepare($query);
         $statement->bindParam(':id', $categoryId, PDO::PARAM_INT);
         return $statement->execute();
+    }
+    
+    public static function countAll(){
+        $db = Db::getConnection();
+        $query = "SELECT COUNT(`id`) AS total FROM `category`";
+        $statement = $db->prepare($query);
+        if($statement->execute()){
+            $res = $statement->fetch(PDO::FETCH_ASSOC);
+            return $res['total'];
+        }
+        return 0;
     }
 }
