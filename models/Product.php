@@ -7,9 +7,10 @@
  */
 class Product {
     const SHOW_BY_DEFAULT = 3;
+    const SHOW_BY_DEFAULT_FOR_ADMIN = 8;
     const SHOW_RECOMMENDED = 6;
     
-    public static function getAll(){
+    public static function countAll(){
         $db = Db::getConnection();
         $query = "SELECT COUNT(`id`) AS total FROM `product`";
         $statement = $db->prepare($query);
@@ -20,8 +21,16 @@ class Product {
         return 0;
     }
     
-    public static function countAll(){
+    
+    
+    public static function getAll(){
         $db = Db::getConnection();
+        $query = "SELECT * FROM `product` ORDER BY `id` DESC";
+        $statement = $db->prepare($query);
+        if($statement->execute()){
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return false;
     }
     
     public static function getLatest($limit = self::SHOW_BY_DEFAULT){
@@ -55,7 +64,6 @@ class Product {
     }
     
     public static function getProductsByCategoryId($categoryId, $page){
-        //Utils::debug($categoryId);
         $db = Db::getConnection();
         $offset = ($page - 1) * self::SHOW_BY_DEFAULT;
         $statement = $db->prepare("SELECT `id`, `name`, `price`, `image`, `is_new` "
@@ -72,7 +80,24 @@ class Product {
             $products = $statement->fetchAll(PDO::FETCH_ASSOC);
         }
         
-        //Utils::debug($products);
+        return $products;
+    }
+    
+    public static function getProductsForPage($page){
+        $db = Db::getConnection();
+        $offset = ($page - 1) * self::SHOW_BY_DEFAULT_FOR_ADMIN;
+        $statement = $db->prepare("SELECT * FROM `product` WHERE `status` = 1 "
+                . " ORDER BY `id` DESC LIMIT :lim OFFSET :offset");
+        $lim = self::SHOW_BY_DEFAULT_FOR_ADMIN;
+        $statement->bindParam(':lim', $lim, PDO::PARAM_INT);
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $products = [];
+        $res = $statement->execute();
+        
+        if($res){
+            $products = $statement->fetchAll(PDO::FETCH_ASSOC);
+        }
+        
         return $products;
     }
     

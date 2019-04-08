@@ -6,9 +6,15 @@
  * @author Igor Ternyuk <xmonad100 at gmail.com>
  */
 class AdminProductController extends AdminBase {
-    public function actionIndex(){
+    public function actionIndex($page = 1){
         self::checkIfAdmin();
-        $products = Product::getAll();
+        $products = Product::getProductsForPage($page);
+        $productTotal = Product::countAll();
+        //Utils::debug($productTotal);
+        $paginator = new Paginator($page, $productTotal,
+                Product::SHOW_BY_DEFAULT_FOR_ADMIN, "page-");
+        $pagination = $paginator->getHtml();
+        //Utils::debug($pagination);
         require_once ROOT . '/views/admin/product/index.php';
         return true;
     }
@@ -36,30 +42,27 @@ class AdminProductController extends AdminBase {
                 $errors[] = "Введите имя товара";
             }
             
-            if(count($errors) == 0){
+            if(empty($errors)){
                 $insertedProductId = Product::addNew($options);
-                
+                $image = NoImage;
+                $success = false;
                 if($insertedProductId){
                     if (is_uploaded_file($_FILES["filename"]["tmp_name"])) {
                         $localPath = ImageUploadLocalPath;
                         $image = Utils::uploadFile($insertedProductId,
                                 $localPath, true);
-                        if($image){
-                            if(Product::updateImage($insertedProductId, $image)){
-                                $message = "Новый товар успешно добавлен";
-                            }
-                        } else {
-                            $message = "Ошибка загрузки изображения товара";
-                        }
-                    } else {
-                        $message = "Новый товар успешно добавлен";
                     }
-                    
+                    if(Product::updateImage($insertedProductId, $image)){
+                        $success = true;
+                    }
+                }
+                
+                if($success){
+                    $message = "Новый товар успешно добавлен";
                 } else {
                     $message = "Ошибка добавления товара";
                 }
-            }
-            
+            }            
         } 
         
         $categories = Category::getAll();
@@ -94,7 +97,7 @@ class AdminProductController extends AdminBase {
                 $errors[] = "Введите имя товара";
             }
             
-            if(count($errors) == 0){
+            if(empty($errors)){
                 $productUpdated = Product::update($options);
                 //Utils::debug($productUpdated);
                 if($productUpdated){

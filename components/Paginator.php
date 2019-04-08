@@ -48,6 +48,8 @@ class Paginator {
                $links .= $this->generateReferenceHtml($page);
            }
        }
+       
+       //Utils::debug($limits['start']);
        //Creates references for the first and last pages
        if(!is_null($links)){
            if($this->currentPage > 1){
@@ -66,17 +68,20 @@ class Paginator {
    
    private function limits(){
        $start = $this->currentPage - ceil($this->maxPagesToShow / 2);
-       $start = $start > 0 ? $start : 1;
+       
+       $start = $start <= 0 ? 1 : $start;
+       //Utils::debug($start);
        if($start + $this->maxPagesToShow <= $this->pageTotal){
            $end = $start + $this->maxPagesToShow - 1;
        } else {
            $end = $this->pageTotal;
            $start = $end - $this->maxPagesToShow;
-           if($start < 0){
+           if($start <= 0){
                $start = 1;
            }
        }
-       //echo "start = ".$start." end = ".$end; 
+       //echo "start = ".$start." end = ".$end;
+       //Utils::debug(['start' => $start, 'end' => $end,'pageTotal' => $this->pageTotal]);
        return ['start' => $start, 'end' => $end];
    }
    

@@ -32,7 +32,7 @@
                                     <div class="single-products">
                                         <div class="productinfo text-center">
                                             <a href="/product/<?php echo $product['id']; ?>">
-                                                <img src="/template/images/home/product1.jpg" alt="" />
+                                                <img src="<?php echo $product['image'] ? PathToProductImages.$product['image'] : PathToProductImages.NoImage; ?>" alt="" />
                                             </a>
                                             <h2><?php echo "$".$product['price']; ?></h2>
                                             <p>
@@ -69,7 +69,7 @@
                                 <div class="product-image-wrapper">
                                     <div class="single-products">
                                         <div class="productinfo text-center">
-                                            <img src="/template/images/home/product1.jpg" alt="" />
+                                            <img src="<?php echo $product['image'] ? PathToProductImages.$product['image'] : PathToProductImages.NoImage; ?>" alt="" />
                                             <h2>$<?php echo $sliderItem['price']; ?></h2>
                                             <a href="/product/<?php echo $sliderItem['id']; ?>">
                                                 <?php echo $product['name']; ?>

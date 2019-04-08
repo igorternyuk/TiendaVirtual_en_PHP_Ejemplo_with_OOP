@@ -19,7 +19,9 @@ class OrderItem {
     
     public static function getAllItemsByOrderId($orderId){
         $db = Db::getConnection();
-        $query = "SELECT oi.*, p.id AS id, p.code, p.name, p.price FROM `product` AS p LEFT JOIN"
+        $query = "SELECT oi.*, p.id AS id, p.code AS code, p.name AS name,"
+                . " p.price AS price, oi.`count` AS `count`"
+                . " FROM `product` AS p LEFT JOIN"
                 . " `order_item` AS oi ON oi.product_id = p.id "
                 . " WHERE oi.`order_id` = :order_id";
         $statement = $db->prepare($query);

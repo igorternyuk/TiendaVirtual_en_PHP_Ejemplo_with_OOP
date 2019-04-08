@@ -18,7 +18,7 @@
             <?php } ?>
             <h4>Список товаров</h4>
             
-            <table class="table-bordered table-striped table">
+            <table id="productTable" class="table-bordered table-striped table">
                 <tr>
                     <th>ID</th>
                     <th>Артикул</th>
@@ -38,6 +38,7 @@
                 </tr>
                 <?php } ?>
             </table>
+            <center><?php echo $pagination; ?></center>
         </div>
     </div>
 </section>

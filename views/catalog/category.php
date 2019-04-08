@@ -35,7 +35,7 @@
                                     <div class="single-products">
                                         <div class="productinfo text-center">
                                             <a href="/product/<?php echo $product['id']; ?>">
-                                                <img src="/template/images/home/product1.jpg" alt="" />
+                                                <img src="<?php echo $product['image'] ? PathToProductImages.$product['image'] : PathToProductImages.NoImage; ?>" alt="" />
                                             </a>
                                             <h2><?php echo "$".$product['price']; ?></h2>
                                             <p>
