@@ -12,13 +12,20 @@
             </div>
             
             <a href="/admin/product/create" class="btn btn-default back"><i class="fa fa-plus"></i> Добавить товар</a>
+            <br /><br />
+            <form action="/admin/product/search/page-1" method="post">
+                <div class="search_box">
+                    <input id="searchPattern" name="searchPattern" type="text" placeholder="Поиск..." value="<?php if(isset($searchPattern)) { echo $searchPattern; }; ?>"/>                
+                </div>
+                <input type="submit" class="btn btn-default" name="btnSearch" value="Поиск" />
+            </form>
             
             <?php if(isset($ok) && $ok) { ?>
                 <h4>Товар успешно удален</h4>
             <?php } ?>
             <h4>Список товаров</h4>
-            
-            <table id="productTable" class="table-bordered table-striped table">
+            <div id="productTable">
+                <table class="table-bordered table-striped table">
                 <tr>
                     <th>ID</th>
                     <th>Артикул</th>
@@ -37,8 +44,10 @@
                     <td><a href="/admin/product/remove/<?php echo $product['id']; ?>" title="Удалить"><i class="fa fa-times"></a></td>
                 </tr>
                 <?php } ?>
-            </table>
+                </table>
             <center><?php echo $pagination; ?></center>
+            </div>
+            
         </div>
     </div>
 </section>

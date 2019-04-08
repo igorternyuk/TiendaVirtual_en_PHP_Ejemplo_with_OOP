@@ -21,7 +21,18 @@ class Product {
         return 0;
     }
     
-    
+    public static function countByName($searchPattern){
+        $db = Db::getConnection();
+        $query = "SELECT COUNT(`id`) AS total FROM `product` WHERE `name` LIKE :pattern";
+        $statement = $db->prepare($query);
+        $searchPattern = '%'.$searchPattern.'%';
+        $statement->bindParam(':pattern', $searchPattern, PDO::PARAM_STR);
+        if($statement->execute()){
+            $res = $statement->fetch(PDO::FETCH_ASSOC);
+            return $res['total'];
+        }
+        return 0;
+    }
     
     public static function getAll(){
         $db = Db::getConnection();
@@ -53,9 +64,9 @@ class Product {
         $db = Db::getConnection();
         $numToShow = intval($numToShow);
         $query = "SELECT * FROM `product` WHERE `status` = 1 AND"
-                . " `is_recommended` = 1 ORDER BY `id` DESC LIMIT {$numToShow}";
+                . " `is_recommended` = 1 ORDER BY `id` DESC LIMIT :to_show";
         $statement = $db->prepare($query);
-        //$statement->bindParam(':to_show', $numToShow);
+        $statement->bindParam(':to_show', $numToShow, PDO::PARAM_INT);
         $res = $statement->execute();
         if($res){
             return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -63,42 +74,63 @@ class Product {
         return false;
     }
     
-    public static function getProductsByCategoryId($categoryId, $page){
+    public static function getProductsByCategoryId($categoryId, $page = 1,
+            $searchPattern = '', $sortCriteria = '`id` DESC'){
         $db = Db::getConnection();
         $offset = ($page - 1) * self::SHOW_BY_DEFAULT;
         $statement = $db->prepare("SELECT `id`, `name`, `price`, `image`, `is_new` "
                 . "FROM `product` WHERE `status` = 1 AND `category_id` = :category_id"
-                . " ORDER BY `id` DESC LIMIT :lim OFFSET :offset");
+                . " AND (`name` LIKE :search_pattern"
+                . " OR `brand` LIKE :search_pattern) ORDER BY :sort_criteria"
+                . " LIMIT :lim OFFSET :offset");
         $lim = self::SHOW_BY_DEFAULT;
         $statement->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
+        $searchPattern = '%'.$searchPattern.'%';
+        $statement->bindParam(':search_pattern', $searchPattern, PDO::PARAM_STR);
+        $statement->bindParam(':sort_criteria', $sortCriteria, PDO::PARAM_STR);
         $statement->bindParam(':lim', $lim, PDO::PARAM_INT);
         $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $products = [];
-        $res = $statement->execute();
         
-        if($res){
-            $products = $statement->fetchAll(PDO::FETCH_ASSOC);
-        }
-        
-        return $products;
+        if($statement->execute()){
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }        
+        return $false;
     }
     
-    public static function getProductsForPage($page){
+    public static function getProductsForPage($page = 1, $searchPattern = '',
+            $sortCriteria = '`id` DESC'){
         $db = Db::getConnection();
         $offset = ($page - 1) * self::SHOW_BY_DEFAULT_FOR_ADMIN;
         $statement = $db->prepare("SELECT * FROM `product` WHERE `status` = 1 "
-                . " ORDER BY `id` DESC LIMIT :lim OFFSET :offset");
+                . " AND (`name` LIKE :search_pattern"
+                . " OR `brand` LIKE :search_pattern) "
+                . "ORDER BY :sort_criteria LIMIT :lim OFFSET :offset");
         $lim = self::SHOW_BY_DEFAULT_FOR_ADMIN;
+        $searchPattern = '%'.$searchPattern.'%';
+        $statement->bindParam(':search_pattern', $searchPattern, PDO::PARAM_STR);
+        $statement->bindParam(':sort_criteria', $sortCriteria, PDO::PARAM_STR);
         $statement->bindParam(':lim', $lim, PDO::PARAM_INT);
         $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $products = [];
-        $res = $statement->execute();
-        
-        if($res){
-            $products = $statement->fetchAll(PDO::FETCH_ASSOC);
-        }
-        
-        return $products;
+       if($statement->execute()){
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }        
+        return false;
+    }
+    
+    public static function fetchByName($searchPattern = '', $sortCriteria = '`id` DESC'){
+        $db = Db::getConnection();
+        $statement = $db->prepare("SELECT * FROM `product` WHERE `status` = 1 "
+                . " AND (`name` LIKE :search_pattern"
+                . " OR `brand` LIKE :search_pattern) "
+                . "ORDER BY :sort_criteria");
+        $lim = self::SHOW_BY_DEFAULT_FOR_ADMIN;
+        $searchPattern = '%'.$searchPattern.'%';
+        $statement->bindParam(':search_pattern', $searchPattern, PDO::PARAM_STR);
+        $statement->bindParam(':sort_criteria', $sortCriteria, PDO::PARAM_STR);
+        if($statement->execute()){
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }        
+        return false;
     }
     
     public static function countProductsOfCategory($categoryId){

@@ -64,3 +64,28 @@ function toggleOrderProductsView(orderId){
         $("#toggleProduct_" + orderId).html("Скрыть товары заказа");
     } 
 }
+
+function fetchProductsByName(){
+    let searchPattern = $("#searchBox").val();
+    let postData = {'searchPattern' : searchPattern};
+    console.log("postData: ");
+    console.log(postData);
+    
+    $.ajax({
+        type: 'POST',
+        async: false,
+        url: "/admin/product/search-" + searchPattern + "/page-1",
+        data: postData,
+        dataType: 'json',
+        success: function(data){
+            if(data['success']){
+                console.log("Data received: ");
+                console.log(data);
+               let resPage = data['results'];
+               $("#productTable").html(resPage);
+            } else {
+               $("#productTable").html("<h4>Ни одного товара не найдено</h4>");               
+            }
+        }
+    }); 
+}

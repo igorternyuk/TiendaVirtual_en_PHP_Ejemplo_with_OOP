@@ -5,6 +5,7 @@ return [
     'admin/product/update/([0-9]+)' => 'adminProduct/update/$1',
     'admin/product/remove/([0-9]+)' => 'adminProduct/remove/$1',
     'admin/product/page-([0-9]+)' => 'adminProduct/index/$1',
+    'admin/product/search/page-([0-9]+)' => 'adminProduct/index/$1',
     'admin/product' => 'adminProduct/index',
     'admin/category/create' => 'adminCategory/create',
     'admin/category/update/([0-9]+)' => 'adminCategory/update/$1',

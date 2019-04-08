@@ -8,14 +8,60 @@
 class AdminProductController extends AdminBase {
     public function actionIndex($page = 1){
         self::checkIfAdmin();
-        $products = Product::getProductsForPage($page);
-        $productTotal = Product::countAll();
+        
+        $btnSearchPressed = filter_input(INPUT_POST, 'btnSearch');
+        
+        if($btnSearchPressed){
+            $searchPattern = filter_input(INPUT_POST, 'searchPattern');
+            $_SESSION['searchPattern'] = $searchPattern;
+        } else {
+            $searchPattern = isset($_SESSION['searchPattern'])
+                    ? $_SESSION['searchPattern']
+                    : '';
+        }
+        
+        $products = Product::getProductsForPage($page, $searchPattern);
+        
+        if($searchPattern == ''){
+            $productTotal = Product::countAll();
+        } else {
+            $productTotal = Product::countByName($searchPattern);
+            $_SESSION['searchPattern'] = $searchPattern;
+        }
         //Utils::debug($productTotal);
         $paginator = new Paginator($page, $productTotal,
                 Product::SHOW_BY_DEFAULT_FOR_ADMIN, "page-");
         $pagination = $paginator->getHtml();
         //Utils::debug($pagination);
         require_once ROOT . '/views/admin/product/index.php';
+        return true;
+    }
+    
+    public function actionSearch($searchPattern = '',
+            $sortCriteria = ' `id` DESC '){
+        self::checkIfAdmin();
+        if($searchPattern == ''){
+            Utils::redirect('/admin/views/product');
+        }
+        $products = Product::fetchByName($searchPattern, $sortCriteria);
+        
+        ob_start(); // turn on output buffering
+        include(ROOT . '/views/admin/product/view.php');
+        $searchResults = ob_get_contents(); // get the contents of the output buffer
+        ob_end_clean(); //  clean (erase) the output buffer and turn off output buffering
+        
+        $res = [];
+        if(!empty($products)){
+            $res['success'] = true;
+            $res['results'] = $searchResults;
+        } else {
+            $res['success'] = false;
+            $res['results'] = "<h4>Ни одного товара не найдено.</h4>";
+        }
+        
+        //Utils::debug($pagination);
+        //require_once ROOT . '/views/admin/product/index.php';
+        echo json_encode($res);
         return true;
     }
     

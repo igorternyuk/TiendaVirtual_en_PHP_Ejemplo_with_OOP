@@ -22,6 +22,7 @@
 <script src="/template/js/price-range.js"></script>
 <script src="/template/js/jquery.prettyPhoto.js"></script>
 <script src="/template/js/main.js"></script>
+<script src="/template/js/custom.js"></script>
 <script>
     $(document).ready(function(){
         $(".add-to-cart").click(function () {
