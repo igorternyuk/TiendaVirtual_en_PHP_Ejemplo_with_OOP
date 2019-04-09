@@ -276,4 +276,20 @@ class Product {
         return $res;
     }
     
+    public static function getImage($productId){
+        $product = self::getProductById($productId);
+        $root = filter_input(INPUT_SERVER, 'DOCUMENT_ROOT');
+        //Utils::debug($root);
+        if(!$product || !$product['image']){
+            return PathToProductImages.NoImage;
+        }
+        $pathToImage = ROOT.PathToProductImages.$product['image'];
+        //echo $pathToImage;
+        if(file_exists($pathToImage)){
+            return PathToProductImages.$product['image'];
+        } else {
+            return PathToProductImages.NoImage;
+        }
+    }
+    
 }

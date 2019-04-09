@@ -32,7 +32,7 @@
                                     <div class="single-products">
                                         <div class="productinfo text-center">
                                             <a href="/product/<?php echo $product['id']; ?>">
-                                                <img src="<?php echo $product['image'] ? PathToProductImages.$product['image'] : PathToProductImages.NoImage; ?>" alt="" />
+                                                <img src="<?php echo Product::getImage($product['id'])?>" alt="" />
                                             </a>
                                             <h2><?php echo "$".$product['price']; ?></h2>
                                             <p>

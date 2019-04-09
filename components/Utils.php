@@ -27,7 +27,7 @@ class Utils {
     
     public static function redirect($url = '/'){
         header("Location: {$url}");
-    exit;
+        exit;
     }
     
     public static function uploadFile($localFileName, $localPath = "/upload/images/",

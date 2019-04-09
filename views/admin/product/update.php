@@ -78,6 +78,7 @@
                         <label>Рекомендуемый<input type="checkbox" id="isProductRecommended" name="isProductRecommended" <?php if($product['is_recommended']) { echo ' checked="checked" '; }?> /></label>
                         <label>Отображать товар<input type="checkbox" id="productStatus" name="productStatus"  <?php if($product['status']) { echo ' checked="checked" '; }?>/></label>
                         <br /><br />
+                        <img src="<?php echo Product::getImage($product['id'])?>" width="200">
                         <p>Загрузить изображение</p>
                         <input type="file" name="filename" value='<?php echo $product['image']; ?>'/>
                         <br /><br />
